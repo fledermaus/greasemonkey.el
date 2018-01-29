@@ -1,0 +1,34 @@
+The scripts are actually stored, compressed with snappy, inside the sqlite
+backend, further wrapped inside some sort of tagged binary pseudo-json markup.
+
+sqlite access is currently handled by driving sqlite and quoting the
+binary fields in the dqlite language.
+
+Snappy compression is handled by the bundled snappy.el
+
+The decompressed blob looks like this:
+
+0000 0000 0000 f1ff - starting tag
+
+0000 0000 0800 ffff - hash or object (kvpairs)
+
+     length bytes are LE
+____/
+0b00 0080 0400 ffff - ascii string "description"
+                    - 0b = length 
+                    - NUL padded to nearest 8 byte boundary
+3200 0080 0400 ffff - ascii string, length 50, as above
+
+0f29 0000 0400 ffff - UCS-2-ish string, 2x 0x290f bytes, 8 byte padded
+
+0000 0000 0700 ffff - list start
+0000 0000 1300 ffff - list/hash/object end
+0000 0000 0300 ffff - 0th list item (followed by another type tag)
+0200 0000 0300 ffff - 2nd list item
+
+
+0000 0000 0100 ffff - boolean (false)
+0100 0000 0200 ffff - boolean (true)
+0000 0000 0000 ffff - ? iconBlob - probaly null
+
+0600 0000 0300 ffff - LE integer, (2 bytes?) evalcontentversion == 6
