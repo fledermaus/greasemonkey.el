@@ -130,7 +130,8 @@
           (setq offs (+ offs 2)))
         (setq written (point-max)))
       (with-current-buffer (snappy-unpack (current-buffer))
-        (write-region (point-min) (point-max) unpacked)))
+        (let ((inhibit-message t))
+          (write-region (point-min) (point-max) unpacked))))
     written))
 
 (defun gm-sync-storage-to-staging-internal (staging buf)
