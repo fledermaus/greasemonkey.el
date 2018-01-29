@@ -158,9 +158,8 @@
                          gm-extract-all-sql sql-sqlite-program))
         err-str
         rval)
-    ;;(setq storage '("/tmp/dummygm.sqlite")) ;; switch to debug target
-    (setq storage (car storage)
-          staging (expand-file-name (or staging "~/.emacs.d/greasemonkey"))
+    ;;(setq storage "/tmp/dummygm.sqlite") ;; switch to debug target
+    (setq staging (expand-file-name (or staging "~/.emacs.d/greasemonkey"))
           rval    (shell-command (concat cmd " " storage) std-out std-err)
           err-str (with-current-buffer std-err (buffer-string)))
     (if (and (eq rval 0) (eq 0 (length err-str)))
